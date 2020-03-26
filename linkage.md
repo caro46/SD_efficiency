@@ -108,24 +108,71 @@ CHR_mks <- group_seq(input.2pts = twopts, seqs = list(CHR1L = CHR1L,CHR2L = CHR2
 
 #One or more of the provided marker sequences from list(CHR1L = CHR1L, CHR2L = CHR2L, CHR3L = CHR3L, CHR4L = CHR4L,      CHR5L = CHR5L, CHR6L = CHR6L, CHR7L = CHR7L, CHR8L = CHR8L,      CHR9_10L = CHR9_10L, CHR1S = CHR1S, CHR2S = CHR2S, CHR3S = CHR3S,      CHR4S = CHR4S, CHR5S = CHR5S, CHR6S = CHR6S, CHR7S = CHR7S,      CHR8S = CHR8S, CHR9_10S = CHR9_10S) do not form single linkage groups. The group with the highest number of markers belonging to the sequence will be considered.
 
-CHR1L_frame <- mds_onemap(CHR_mks$sequences$CHR1L) 
-CHR1S_frame <- mds_onemap(CHR_mks$sequences$CHR1S) 
-CHR2L_frame <- mds_onemap(CHR_mks$sequences$CHR2L) #not working
-CHR2S_frame <- mds_onemap(CHR_mks$sequences$CHR2S) #WORKING!!!
-CHR3S_frame <- mds_onemap(CHR_mks$sequences$CHR3S) 
-CHR3L_frame <- mds_onemap(CHR_mks$sequences$CHR3L)
-CHR4S_frame <- mds_onemap(CHR_mks$sequences$CHR4S)
-CHR4L_frame <- mds_onemap(CHR_mks$sequences$CHR4L)
-CHR5S_frame <- mds_onemap(CHR_mks$sequences$CHR5S)
-CHR5L_frame <- mds_onemap(CHR_mks$sequences$CHR5L)
-CHR6S_frame <- mds_onemap(CHR_mks$sequences$CHR6S)
-CHR6L_frame <- mds_onemap(CHR_mks$sequences$CHR6L)
-CHR7S_frame <- mds_onemap(CHR_mks$sequences$CHR7S)
-CHR7L_frame <- mds_onemap(CHR_mks$sequences$CHR7L)
-CHR8S_frame <- mds_onemap(CHR_mks$sequences$CHR8S)
-CHR8L_frame <- mds_onemap(CHR_mks$sequences$CHR8L)
-CHR9_10S_frame <- mds_onemap(CHR_mks$sequences$CHR9_10S)
-CHR9_10L_frame <- mds_onemap(CHR_mks$sequences$CHR9_10L)
+#CHR1L_frame <- mds_onemap(CHR_mks$sequences$CHR1L) 
+#CHR1S_frame <- mds_onemap(CHR_mks$sequences$CHR1S) 
+#CHR2L_frame <- mds_onemap(CHR_mks$sequences$CHR2L) #not working
+#CHR2S_frame <- mds_onemap(CHR_mks$sequences$CHR2S) #WORKING!!!
+#CHR3S_frame <- mds_onemap(CHR_mks$sequences$CHR3S) 
+#CHR3L_frame <- mds_onemap(CHR_mks$sequences$CHR3L)
+#CHR4S_frame <- mds_onemap(CHR_mks$sequences$CHR4S)
+#CHR4L_frame <- mds_onemap(CHR_mks$sequences$CHR4L)
+#CHR5S_frame <- mds_onemap(CHR_mks$sequences$CHR5S)
+#CHR5L_frame <- mds_onemap(CHR_mks$sequences$CHR5L)
+#CHR6S_frame <- mds_onemap(CHR_mks$sequences$CHR6S)
+#CHR6L_frame <- mds_onemap(CHR_mks$sequences$CHR6L)
+#CHR7S_frame <- mds_onemap(CHR_mks$sequences$CHR7S)
+#CHR7L_frame <- mds_onemap(CHR_mks$sequences$CHR7L)
+#CHR8S_frame <- mds_onemap(CHR_mks$sequences$CHR8S)
+#CHR8L_frame <- mds_onemap(CHR_mks$sequences$CHR8L)
+#CHR9_10S_frame <- mds_onemap(CHR_mks$sequences$CHR9_10S)
+#CHR9_10L_frame <- mds_onemap(CHR_mks$sequences$CHR9_10L)
+
+#Since issue with mds_onemap for 2L, tried the other way and worked so let's try for everybody
+
+CHR1L_ord <- order_seq(CHR_mks$sequences$CHR1L) 
+CHR1L_frame <- make_seq(CHR1L_ord, "force")
+CHR1S_ord <- order_seq(CHR_mks$sequences$CHR1S) 
+CHR1S_frame <- make_seq(CHR1S_ord, "force")
+
+CHR2L_ord <- order_seq(CHR_mks$sequences$CHR2L) 
+CHR2L_frame <- make_seq(CHR2L_ord, "force")
+CHR2S_ord <- order_seq(CHR_mks$sequences$CHR2S) 
+CHR2S_frame <- make_seq(CHR2S_ord, "force")
+
+CHR3L_ord <- order_seq(CHR_mks$sequences$CHR3L) 
+CHR3L_frame <- make_seq(CHR3L_ord, "force")
+CHR3S_ord <- order_seq(CHR_mks$sequences$CHR3S) 
+CHR3S_frame <- make_seq(CHR3S_ord, "force")
+
+CHR4L_ord <- order_seq(CHR_mks$sequences$CHR4L) 
+CHR4L_frame <- make_seq(CHR4L_ord, "force")
+CHR4S_ord <- order_seq(CHR_mks$sequences$CHR4S) 
+CHR4S_frame <- make_seq(CHR4S_ord, "force")
+
+CHR5L_ord <- order_seq(CHR_mks$sequences$CHR5L) 
+CHR5L_frame <- make_seq(CHR5L_ord, "force")
+CHR5S_ord <- order_seq(CHR_mks$sequences$CHR5S) 
+CHR5S_frame <- make_seq(CHR5S_ord, "force")
+
+CHR6L_ord <- order_seq(CHR_mks$sequences$CHR6L) 
+CHR6L_frame <- make_seq(CHR6L_ord, "force")
+CHR6S_ord <- order_seq(CHR_mks$sequences$CHR6S) 
+CHR6S_frame <- make_seq(CHR6S_ord, "force")
+
+CHR7L_ord <- order_seq(CHR_mks$sequences$CHR7L) 
+CHR7L_frame <- make_seq(CHR7L_ord, "force")
+CHR7S_ord <- order_seq(CHR_mks$sequences$CHR7S) 
+CHR7S_frame <- make_seq(CHR7S_ord, "force")
+
+CHR8L_ord <- order_seq(CHR_mks$sequences$CHR8L) 
+CHR8L_frame <- make_seq(CHR8L_ord, "force")
+CHR8S_ord <- order_seq(CHR_mks$sequences$CHR8S) 
+CHR8S_frame <- make_seq(CHR8S_ord, "force")
+
+CHR9_10L_ord <- order_seq(CHR_mks$sequences$CHR9_10L) 
+CHR9_10L_frame <- make_seq(CHR9_10L_ord, "force")
+CHR9_10S_ord <- order_seq(CHR_mks$sequences$CHR9_10S) 
+CHR9_10S_frame <- make_seq(CHR9_10S_ord, "force")
 
 rf_graph_table(CHR2S_frame) # graphic not showed
 
