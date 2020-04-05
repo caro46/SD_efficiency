@@ -13,6 +13,11 @@ R
 >install.packages("vcfR")
 # did it by steps to avoid cedar failing
 ```
+To work interactively on cedar:
+```
+salloc --time 2:0:0 --ntasks=1 --account=[account_name] --mem 2G
+```
+
 # Onemap Linkage
 Our crosses are usually outcrosses so need to use `Onemap` followed by `R/qtl`.
 Below is a test. Need to make a better and optimized script.
