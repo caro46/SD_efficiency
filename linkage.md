@@ -13,7 +13,7 @@ R
 >install.packages("vcfR")
 # did it by steps to avoid cedar failing
 ```
-# Linkage
+# Onemap Linkage
 Our crosses are usually outcrosses so need to use `Onemap` followed by `R/qtl`.
 Below is a test. Need to make a better and optimized script.
 
@@ -23,7 +23,7 @@ library(onemap)
 library(vcfR)
 
 #working directory
-setwd("/home/cauretc/scratch/clivii_radseq_unknown_sex")
+setwd("[path_to_scratch]/scratch/clivii_radseq_unknown_sex")
 
 #converting vcf to onemap format
 vcfR.object_1_2 <- read.vcfR("mpileup_MQ20_varsOnly_cliviiFamily_chr1-2.vcf.gz")
@@ -215,4 +215,85 @@ plot(out.em, out.hk, col=c("blue","red"))
 
 plot(out.hk, bandcol="gray70")
 
+```
+# Plinks
+
+```bash
+bcftools query -l mpileup_MQ20_varsOnly_cliviiFamily_chr3-5.vcf.gz
+bcftools concat mpileup_MQ20_varsOnly_cliviiFamily_chr1-2.vcf.gz mpileup_MQ20_varsOnly_cliviiFamily_chr3-5.vcf.gz mpileup_MQ20_varsOnly_cliviiFamily_chr6-910.vcf.gz -o mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.vcf
+gzip mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.vcf
+sbatch [path_to_project]project/[account]/scripts/plink.sh mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.vcf.gz pheno_binary.plink all_chr_plink
+```
+
+```R
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(gridExtra)
+
+setwd("[path_to_scratch]/scratch/clivii_radseq_unknown_sex")
+
+Xcl_dmw_gwas_plinks <- read.table("./all_chr_plink.dmw_e2.glm.logistic",h=F,sep="\t")
+head(Xcl_dmw_gwas_plinks)
+
+colnames(Xcl_dmw_gwas_plinks) <- c("CHROM", "POS", "ID", "REF", "ALT", "A1", "TEST", "OBS_CT", "OR", "LOG(OR)_SE", "Z_STAT", "LOG10_P")
+
+main_ggplot <- ggplot(data = Xcl_dmw_gwas_plinks) + 
+  geom_point(aes(x=POS/1000000, #to put the axis into Mb instead of exponents
+                 y=LOG10_P))+
+  # black & white color theme 
+  theme(axis.text.x = element_text(colour = "black",size=15),
+        axis.text.y = element_text(colour = "black",size=15),
+        axis.title=element_text(size=16,face="bold"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        panel.background = element_blank())+
+  labs(x = "position (Mb)") +
+  facet_grid(cols=vars(CHROM))
+
+ggsave("Rplot_Xcl_dmw_gwas_plinks_all_chr_logP.png", plot = main_ggplot, dpi = 200)
+```
+# Fst
+```bash
+module load nixpkgs/16.09  intel/2018.3 vcftools/0.1.16vcftools --remove-indv Xc_BE3_girl.fastq.gz --gzvcf mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.vcf.gz --recode --out mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat_no_BE3.vcf.gz
+vcftools --remove-indv Xc_BE3_girl.fastq.gz --remove-indv Xc_U4_ukn.fastq.gz --remove-indv Xc_BE9_girl.fastq.gz --remove-indv Xc_BE12_girl.fastq.gz --gzvcf mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.vcf.gz --recode --out mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat_no_BE3_U4_BE9_BE12.vcf.gz
+vcf-to-tab < mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat_no_BE3_U4_BE9_BE12.vcf.gz.recode.vcf > mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat_no_BE3_U4_BE9_BE12.vcf.gz.recode.tab
+sbatch ~/additional_scripts/vcftools.sh ../mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat_no_BE3_U4_BE9_BE12.vcf.gz.recode.vcf dmw_pop.txt no_dmw_pop.txt vcftools_fst_Xcliv_uknSex_dmw_no_dmw_50kb_wind.weir.fst
+```
+```R
+setwd("[path_to_scratch]/scratch/clivii_radseq_unknown_sex/fst")
+
+Xcl_dmw_fst <- read.table("./vcftools_fst_Xcliv_uknSex_dmw_no_dmw.weir.fst",h=T,sep="\t")
+
+cleanPlot2 <- function() {theme_bw()+
+    theme(
+      panel.spacing = unit(0.2, "lines"),
+      strip.background = element_blank(),
+      strip.text.y = element_text(angle = 0, size = 16),
+      strip.text.x = element_text(size = 16),
+      axis.text = element_text(size = 11),
+      axis.title = element_text(size = 20),
+      legend.text = element_text(size = 16),
+      legend.title = element_text(size = 16),
+      #legend.position = 'top',
+      axis.line = element_blank(),
+      #axis.ticks = element_blank(),
+      panel.border = element_rect(fill = NA,colour = "grey20"),
+      panel.grid = element_blank(),
+      #panel.grid.major = element_line(color = 'grey85'),
+      #panel.border = element_blank(),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.background = element_blank()
+    )
+}
+
+main_ggplot <- ggplot(data = Xcl_dmw_fst) + 
+  geom_point(aes(x=POS/1000000, #to put the axis into Mb instead of exponents
+                 y=WEIR_AND_COCKERHAM_FST),size=1)+
+  labs(x = "position (Mb)", y = "Fst (dmw/no dmw)") +
+  facet_grid(rows=vars(CHROM)) +
+  cleanPlot2()
+
+ggsave("Rplot_Xcl_dmw_no_dmw_fst.png", plot = main_ggplot, dpi = 200)
 ```
