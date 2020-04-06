@@ -267,7 +267,10 @@ bcftools reheader --samples header_change_ID_XCl.txt -o mpileup_MQ20_varsOnly_cl
 plink --vcf mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat_no_underscoreID.vcf --make-bed --out mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat --allow-extra-chr
 
 plink --bed mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.bed --fam Pedigree_pheno_no_underscore.txt --bim mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.bim --geno 0.05 --maf 0.05 --hwe 0.000001 --tdt --ci 0.95 --allow-extra-chr --allow-no-sex
+
+plink --bed mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.bed --fam Pedigree_pheno_no_underscore.txt --bim mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.bim --geno 0.05 --maf 0.1 --tdt --ci 0.95 --allow-extra-chr --allow-no-sex
 ```
+Kept only the plot from the last command. Both similar. Signal on multiple unexpected chromosomes.
 
 # Fst
 ```bash
