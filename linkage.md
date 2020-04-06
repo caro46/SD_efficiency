@@ -223,6 +223,8 @@ plot(out.hk, bandcol="gray70")
 ```
 # Plinks
 
+## plink2
+
 ```bash
 bcftools query -l mpileup_MQ20_varsOnly_cliviiFamily_chr3-5.vcf.gz
 bcftools concat mpileup_MQ20_varsOnly_cliviiFamily_chr1-2.vcf.gz mpileup_MQ20_varsOnly_cliviiFamily_chr3-5.vcf.gz mpileup_MQ20_varsOnly_cliviiFamily_chr6-910.vcf.gz -o mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.vcf
@@ -258,6 +260,15 @@ main_ggplot <- ggplot(data = Xcl_dmw_gwas_plinks) +
 
 ggsave("Rplot_Xcl_dmw_gwas_plinks_all_chr_logP.png", plot = main_ggplot, dpi = 200)
 ```
+## plink1
+```
+bcftools reheader --samples header_change_ID_XCl.txt -o mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat_no_underscoreID.vcf ../mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.vcf
+
+plink --vcf mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat_no_underscoreID.vcf --make-bed --out mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat --allow-extra-chr
+
+plink --bed mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.bed --fam Pedigree_pheno_no_underscore.txt --bim mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.bim --geno 0.05 --maf 0.05 --hwe 0.000001 --tdt --ci 0.95 --allow-extra-chr --allow-no-sex
+```
+
 # Fst
 ```bash
 module load nixpkgs/16.09  intel/2018.3 vcftools/0.1.16vcftools --remove-indv Xc_BE3_girl.fastq.gz --gzvcf mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.vcf.gz --recode --out mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat_no_BE3.vcf.gz
