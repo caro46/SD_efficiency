@@ -231,7 +231,13 @@ bcftools concat mpileup_MQ20_varsOnly_cliviiFamily_chr1-2.vcf.gz mpileup_MQ20_va
 gzip mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.vcf
 sbatch [path_to_project]project/[account]/scripts/plink.sh mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.vcf.gz pheno_binary.plink all_chr_plink
 ```
-
+Example of beginning of `.plink` file
+```
+#IID    dmw_e2
+all_Xc_BJE4530  1
+all_Xc_BJE4531  2
+Xc_BE10_boy.fastq.gz    2
+```
 ```R
 library(dplyr)
 library(tidyr)
@@ -265,13 +271,28 @@ ggsave("Rplot_Xcl_dmw_gwas_plinks_all_chr_logP.png", plot = main_ggplot, dpi = 2
 bcftools reheader --samples header_change_ID_XCl.txt -o mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat_no_underscoreID.vcf ../mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.vcf
 
 plink --vcf mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat_no_underscoreID.vcf --make-bed --out mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat --allow-extra-chr
-
+```
+The previous command creates `.bed`, `.bim` and `.fam` files.
+```
 plink --bed mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.bed --fam Pedigree_pheno_no_underscore.txt --bim mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.bim --geno 0.05 --maf 0.05 --hwe 0.000001 --tdt --ci 0.95 --allow-extra-chr --allow-no-sex
 
 plink --bed mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.bed --fam Pedigree_pheno_no_underscore.txt --bim mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.bim --geno 0.05 --maf 0.1 --tdt --ci 0.95 --allow-extra-chr --allow-no-sex
 ```
 Kept only the plot from the last command. Both similar. Signal on multiple unexpected chromosomes.
 
+Beginning of `header_change_ID_XCl.txt` to rename without the underscores.
+```
+all_Xc_BJE4530  allXcBJE4530
+all_Xc_BJE4531  allXcBJE4531
+Xc_BE10_boy.fastq.gz    XcBE10boy.fastq.gz
+Xc_BE11_boy.fastq.gz    XcBE11boy.fastq.gz
+```
+`Pedigree_pheno_no_underscore.txt`
+```
+Family1 allXcBJE4530    0       0       2       2
+Family1 allXcBJE4531    0       0       1       1
+Family1 XcBE10boy.fastq.gz      allXcBJE4531    allXcBJE4530    0       1
+```
 # Fst
 ```bash
 module load nixpkgs/16.09  intel/2018.3 vcftools/0.1.16vcftools --remove-indv Xc_BE3_girl.fastq.gz --gzvcf mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat.vcf.gz --recode --out mpileup_MQ20_varsOnly_cliviiFamily_all_chr_concat_no_BE3.vcf.gz
@@ -316,3 +337,5 @@ main_ggplot <- ggplot(data = Xcl_dmw_fst) +
 
 ggsave("Rplot_Xcl_dmw_no_dmw_fst.png", plot = main_ggplot, dpi = 200)
 ```
+# Conclusion
+Not enough data to make ccl.
