@@ -1,11 +1,12 @@
 # Intro
 With BJE we are going to analyze the RNAseq data obtained from KO individuals of the genes on W of *X. laevis*
 
-# Xenbase data
+# Preliminary
+
+## Xenbase data
 Update on *X. laevis* assembly: W is assembled on 2L! dm-w, ccdc69.w and scan.w are all on 2L.
 Blasted the ccdc69.w sequence on genome + Xenopus mRNA: no transcript, same for scan.w.
 
-# Preliminary
 ## Transcripts of W genes
 One of the first things to do is to compare the scanw and ccdc69w transcripts sequences to those predicted by Mawaribuchi et al.
 BJE produced trinity assemblies and used the dmw batch to get dmw and dmrt1 sequences so no need to produce the database: 
