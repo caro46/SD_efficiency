@@ -16,7 +16,7 @@ BJE produced trinity assemblies and used the dmw batch to get dmw and dmrt1 sequ
 #SBATCH --account=def-ben
 #SBATCH --output=blastn.%J.out
 #SBATCH --error=blastn.%J.err
-# Run: sbatch running_blast.sh ~/projects/rrg-ben/ben/Final_Sequences/XL_ccdc69w_ex1_and_ex2.fasta ~/projects/rrg-ben/ben/2021_XL_ko_tad_RNAseq/trinity_assembly_all_batches_dmw/dmw_trinity_assembly_all_batches.Trinity.fasta ccdc_ex1_2_and_flanking_to_dmw_assemb.out
+# Run: sbatch running_blast.sh ~/projects/rrg-ben/ben/Final_Sequences/XL_ccdc69w_ex1_and_ex2.fasta ~/projects/rrg-ben/ben/2021_XL_ko_tad_RNAseq/trinity_assembly_all_batches_dmw/dmw_trinity_assembly_all_batches.Trinity.fasta_blastable ccdc_ex1_2_and_flanking_to_dmw_assemb.out
 module load nixpkgs/16.09  gcc/7.3.0 blast+/2.9.0
 blastn -query $1 -db $2 -out $3
 ```
