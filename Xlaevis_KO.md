@@ -20,3 +20,4 @@ BJE produced trinity assemblies and used the dmw batch to get dmw and dmrt1 sequ
 module load nixpkgs/16.09  gcc/7.3.0 blast+/2.9.0
 blastn -query $1 -db $2 -out $3
 ```
+Only one match for ccdc69w `TRINITY_DN767_c0_g2_i1` which actually correspond to ccdc69.L...
