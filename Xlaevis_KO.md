@@ -5,9 +5,12 @@ With BJE we are going to analyze the RNAseq data obtained from KO individuals of
 
 ## Xenbase data
 Update on *X. laevis* assembly: W is assembled on 2L! dm-w, ccdc69.w and scan.w are all on 2L.
-Blasted the ccdc69.w sequence on genome + Xenopus mRNA: no transcript, same for scan.w.
+Blasted the ccdc69.w sequence on genome + Xenopus mRNA: no transcript, same for scan.w. (Dec. 8, 2020)
 
 ## Transcripts of W genes
+
+(Dec. 8, 2020)
+
 One of the first things to do is to compare the scanw and ccdc69w transcripts sequences to those predicted by Mawaribuchi et al.
 BJE produced trinity assemblies and used the dmw batch to get dmw and dmrt1 sequences so no need to produce the database: 
 ```bash
@@ -32,6 +35,8 @@ and blasted on xenbase: best hit for ccdc69.S except the tiny region from the tr
 
 ## Sex-linked genes in Xenbase transcriptome
 
+(Dec. 10, 2020)
+
 Piprek et al. 2018 identified important genes linked with sexual differentiation. If we want to use the xenbase transcriptome, we need to make sure that those are there. Sometimes 'a' or 'b' is specified for the paralogs, sometimes not despite the presence of both in the laevis genome (ex. amh) - I thus check at the gene level.
 
 First using grep to identify which ones might need to be checked by blast.
@@ -41,3 +46,5 @@ grep -E 'gata4|sox9|dmrt1|amh|fgf9|ptgds|fshr|cyp17a1|xdm-w|fst|foxl2|cyp19a1' X
 There: gata4.L/S, sox9.L/S, dmrt1.L/S, amh.L/S, fgf9.S (no fgf9.L), ptgds.S (no ptgds.L), fshr.L/S, cyp17a1.L (no cyp17a1.S), xdm-w (=dm-w), fst.L/S, foxl2.L/S, cyp19a1.L (no cyp19a1.S)
 
 fgf9.L is missing from transcriptome despite being annotated on the genome and expressed in the RNA-seq data when clicking on the gene on xenbase. Same for ptgds.L but not for cyp17a1.S and cyp19a1.S for which the paralog might actually be missing.
+
+I also previously blasted the W genes sequence (dmw, scanw and ccdc69w) onto the downloaded transcriptome and only dmw was found (Dec. 8, 2020)
