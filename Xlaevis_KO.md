@@ -51,3 +51,10 @@ I also previously blasted the W genes sequence (dmw, scanw and ccdc69w) onto the
 
 ## Genome versus transcriptome
 
+# Mapping against genome - STAR
+
+`star/2.7.9a` installed and available as a module on graham.
+
+# Raw count - HTSEQ
+
+# Analysis of counts - EdgeR
