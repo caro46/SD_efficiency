@@ -56,5 +56,17 @@ I also previously blasted the W genes sequence (dmw, scanw and ccdc69w) onto the
 `star/2.7.9a` installed and available as a module on graham.
 
 # Raw count - HTSEQ
+On ComputeCanada: 'HTSeq' framework, version 0.9.1
+To load prior to be able to use commands such as `htseq-count`:
+```
+module load nixpkgs/16.09  gcc/5.4.0 mefit/1.0
+```
 
 # Analysis of counts - EdgeR
+## Installation
+```R
+if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("edgeR")
+```
+`export R_LIBS_USER=/home/cauretc/project/cauretc/R_libs` did not work to set the libs path but got installed in the good directory still (where I was)
