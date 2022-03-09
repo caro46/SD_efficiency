@@ -71,6 +71,11 @@ Important note: the fasta file for the genome needs to be unzipped.
 
 For the annotation file I used `XENLA_10.1_GCF_XBmodels.gtf` since already in the good format. Based on notes from Xenbase: NCBI-Xenbase gene models (gtf) - in theory to me the gene models should be better.
 
+The indexing took about 35 min (with 6 threads). 
+
+(March 9, 2022):
+
+Star can directly count the reads per gene using by default only uniquely mapped genes - I am giving it a try since the results are expected to be the same as the default behavior of htseq. I am also outputting TranscriptomeSAM.
 
 # Raw count - HTSEQ
 On ComputeCanada: 'HTSeq' framework, version 0.9.1

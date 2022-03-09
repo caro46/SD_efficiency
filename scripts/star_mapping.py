@@ -33,7 +33,7 @@ def main():
 	parser.add_argument("--single_read_info", type = str, help = "String to exclude unpaired reads. Ex. single", default = "single")
 	parser.add_argument("--threads", type = int, help = "Number of threads. Default: 2", default = 2)
 	parser.add_argument("--output_directory", type = str, default = "", help = "Ouptut directory for bam files. Default: No")
-	parser.add_argument("--prefix_out", type = str, help = "Additional info to be included in the output name. Example: Run1_ Default: empty", default = "")
+	parser.add_argument("--prefix_out", type = str, nargs = "?", help = "Additional info to be included in the output name. Example: Run1_ Default: empty", const = "", default = "")
 
 	## Parsing the arguments
 	args = parser.parse_args()
@@ -57,7 +57,7 @@ def main():
 						Gene, Individual = splitText(gene_individual)
 					R1_filename = filename
 					R2_filename = R1_filename.replace(args.Read1_info, args.Read2_info)
-					cmd = f"""STAR --quantMode GeneCounts --genomeDir {args.genomeSTARDir} --runThreadN {args.threads} --readFilesIn {R1_filename} {R2_filename} --outFileNamePrefix {args.output_directory}/{Gene}_{Individual}_{args.prefix_out}{Lane} --outSAMtype BAM SortedByCoordinate --readFilesCommand zcat """
+					cmd = f"""STAR --quantMode GeneCounts TranscriptomeSAM --genomeDir {args.genomeSTARDir} --runThreadN {args.threads} --readFilesIn {R1_filename} {R2_filename} --outFileNamePrefix {args.output_directory}/{Gene}_{Individual}_{args.prefix_out}{Lane} --outSAMtype BAM SortedByCoordinate --readFilesCommand zcat """
 					print(f"Command: {cmd}")
 					process = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines = True, shell = True) #execute the command 
 					process.wait()
