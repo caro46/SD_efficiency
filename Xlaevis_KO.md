@@ -55,6 +55,23 @@ I also previously blasted the W genes sequence (dmw, scanw and ccdc69w) onto the
 
 `star/2.7.9a` installed and available as a module on graham.
 
+## Indexing genome
+
+```
+wget https://ftp.xenbase.org/pub/Genomics/JGI/Xenla10.1/XENLA_10.1_genome.fa.gz
+wget https://ftp.xenbase.org/pub/Genomics/JGI/Xenla10.1/XENLA_10.1_GCF_XBmodels.gtf
+
+#submitted March8, 2022
+sbatch ~/project/cauretc/scripts/KO_rnaseq/genome_index.sh /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/genomeDir /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla_10_1_ref_genome/XENLA_10.1_genome.fa /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla_10_1_ref_genome/XENLA_10.1_GCF_XBmodels.gtf
+```
+
+`genome_index.sh` can be found in the `scripts` directory.
+
+Important note: the fasta file for the genome needs to be unzipped.
+
+For the annotation file I used `XENLA_10.1_GCF_XBmodels.gtf` since already in the good format. Based on notes from Xenbase: NCBI-Xenbase gene models (gtf) - in theory to me the gene models should be better.
+
+
 # Raw count - HTSEQ
 On ComputeCanada: 'HTSeq' framework, version 0.9.1
 To load prior to be able to use commands such as `htseq-count`:
