@@ -77,6 +77,29 @@ The indexing took about 35 min (with 6 threads).
 
 Star can directly count the reads per gene using by default only uniquely mapped genes - I am giving it a try since the results are expected to be the same as the default behavior of htseq. I am also outputting TranscriptomeSAM.
 
+### Checking for reads on the W specific genes:
+
+#### Location on laevis 10.1
+
+- dmw : Chr2L:182693575-182720555
+
+- scanw (based on blast exons 1>6 including introns from v9): Chr2L:182715762-182725391
+
+- ccdc69w (based on blast exons 1-2 + introns from v9): Chr2L:182743547-182743978 
+
+#### Presence
+
+```
+module load StdEnv/2020  gcc/9.3.0 samtools/1.13
+samtools index SCANW_T14_L002Aligned.sortedByCoord.out.bam
+samtools tview -p Chr2L:182693575 SCANW_T14_L002Aligned.sortedByCoord.out.bam
+samtools tview -p Chr2L:182715762 SCANW_T14_L002Aligned.sortedByCoord.out.bam
+samtools tview -p Chr2L:182725391 SCANW_T14_L002Aligned.sortedByCoord.out.bam
+samtools tview -p Chr2L:182743547 SCANW_T14_L002Aligned.sortedByCoord.out.bam
+
+```
+OK for dmw nothing for the others. BJE highlighted that because of low expression some individuals might not show those genes in the reads.
+
 # Raw count - HTSEQ
 On ComputeCanada: 'HTSeq' framework, version 0.9.1
 To load prior to be able to use commands such as `htseq-count`:
