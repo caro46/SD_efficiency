@@ -1,5 +1,6 @@
 # Intro
-With BJE we are going to analyze the RNAseq data obtained from KO individuals of the genes on W of *X. laevis*
+With BJE we are going to analyze the RNAseq data obtained from KO individuals of the genes on W of *X. laevis*.
+Custom scripts to process and analyze data are in the `scripts` subfolder.
 
 # Preliminary
 
@@ -73,9 +74,28 @@ For the annotation file I used `XENLA_10.1_GCF_XBmodels.gtf` since already in th
 
 The indexing took about 35 min (with 6 threads). 
 
+## Mapping reads
+
 (March 9, 2022):
 
 Star can directly count the reads per gene using by default only uniquely mapped genes - I am giving it a try since the results are expected to be the same as the default behavior of htseq. I am also outputting TranscriptomeSAM.
+
+```
+sbatch ~/project/cauretc/scripts/KO_rnaseq/star_mapping_sub.sh --fastq /home/cauretc/projects/rrg-ben/ben/2021_XL_ko_tad_RNAseq/raw_data_3rd_run/scanw/*trim*.fastq.gz --genomeSTARDir /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/genomeDir --output_directory /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/star_mapping --prefix_out
+```
+Submitted for 10h but only needed 03h and 05min for the whole scanw dataset.
+
+T27 failed - not sure why. Resubmitted by itself on March10.
+
+```
+sbatch ~/project/cauretc/scripts/KO_rnaseq/star_mapping_sub.sh --fastq /home/cauretc/projects/rrg-ben/ben/2021_XL_ko_tad_RNAseq/raw_data/dmw/*trim*.fastq.gz --genomeSTARDir /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/genomeDir --output_directory /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/star_mapping --prefix_out Run1_
+```
+Run 1 submitted for 6h, 2nd run for 4. 10h for ccdc Run 1 and 4h for ccdc Run 2.
+
+I realized run1 had samples split on 2 lanes. On March 16, used `concat_PE_per_ind.py` to concatenate reads per individuals, then rerun star (dmw 3h30). Despite an error of slurm `sbatch: error: Batch job submission failed: Socket timed out on send/recv operation`, multiple jobs were submitted for ccdc, for sanity I resubmitted star on March 16 (time:).
+```
+python3 ~/project/cauretc/scripts/KO_rnaseq/concat_PE_per_ind.py --files /home/cauretc/projects/rrg-ben/ben/2021_XL_ko_tad_RNAseq/raw_data/dmw/*trim*.fastq.gz --output_directory /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/merged_fastq_files
+```
 
 ### Checking for reads on the W specific genes:
 
@@ -89,6 +109,7 @@ Star can directly count the reads per gene using by default only uniquely mapped
 
 #### Presence
 
+(March 9-10, 2022)
 ```
 module load StdEnv/2020  gcc/9.3.0 samtools/1.13
 samtools index SCANW_T14_L002Aligned.sortedByCoord.out.bam
@@ -98,7 +119,17 @@ samtools tview -p Chr2L:182725391 SCANW_T14_L002Aligned.sortedByCoord.out.bam
 samtools tview -p Chr2L:182743547 SCANW_T14_L002Aligned.sortedByCoord.out.bam
 
 ```
-OK for dmw nothing for the others. BJE highlighted that because of low expression some individuals might not show those genes in the reads.
+OK for dmw nothing for the others. BJE highlighted that because of low expression some individuals might not show those genes in the reads (same for T9).
+
+Starting looking at the W specific region (a bit before cdk4 which starts around Chr2L:182818673 based on blast of the S copy):
+
+- cdk6.L (ex around 182816699): a lot of good quality reads 
+
+Going back to dmw and moving towards ccdc:
+
+- 182777321: some high quality reads (no annotation on xenbase, same at 182777001)
+
+**CCL:** I checked for scanw and ccdc (at least around the exons limits, more for 2 ind) for 3 wt ind: T14, T9 and T15 (others wt: 6, KO: 19, 27, 28, 30, 31). No reads except dmw. On the opposite KO T28 does not have reads for dmw while KO T6 has a few. I think it is enough for manual checking/first look at he mapping.
 
 # Raw count - HTSEQ
 On ComputeCanada: 'HTSeq' framework, version 0.9.1
