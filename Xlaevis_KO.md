@@ -131,12 +131,43 @@ Going back to dmw and moving towards ccdc:
 
 **CCL:** I checked for scanw and ccdc (at least around the exons limits, more for 2 ind) for 3 wt ind: T14, T9 and T15 (others wt: 6, KO: 19, 27, 28, 30, 31). No reads except dmw. On the opposite KO T28 does not have reads for dmw while KO T6 has a few. I think it is enough for manual checking/first look at he mapping.
 
-# Raw count - HTSEQ
+# Raw count - HTSEQ - not used
 On ComputeCanada: 'HTSeq' framework, version 0.9.1
 To load prior to be able to use commands such as `htseq-count`:
 ```
 module load nixpkgs/16.09  gcc/5.4.0 mefit/1.0
 ```
+
+Expected to give similar results as star. 
+
+# Star output - count
+
+Star output is in the form of 
+```
+N_unmapped      2151158 2151158 2151158
+N_multimapping  1474468 1474468 1474468
+N_noFeature     6838700 26316149        26227181
+N_ambiguous     176505  36256   37036
+XBmRNA83513     6       4       2
+XBmRNA83514     2473    1271    1202
+```
+(Ex. from `SCANW_T9_L002ReadsPerGene.out.tab`)
+
+Made `star_count_merged.py` to convert into a format ready for edgr. Ex. of the output format:
+
+```
+Genes, SCANW_T14_L002, SCANW_T15_L002, ...
+XBmRNA83513, ..., ...,
+XBmRNA83514, ..., ...,
+```
+Can be run like this:
+```
+ python3 ~/project/cauretc/scripts/KO_rnaseq/star_count_merged.py --files dmw*ReadsPerGene.out.tab --output_directory /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/star_mapping --prefix_out dmw_merged_all_ind_ReadsPerGene
+```
+# Raw count - stringtie
+
+Online [manual](http://ccb.jhu.edu/software/stringtie/index.shtml?t=manual#deseq). "Our focus in developing StringTie was on building a system that can assemble and quantitate transcripts regardless of whether gene annotation is available." (FAQ)
+
 
 # Analysis of counts - EdgeR
 ## Installation
