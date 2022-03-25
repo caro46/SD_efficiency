@@ -78,7 +78,7 @@ The indexing took about 35 min (with 6 threads).
 
 (March 9, 2022):
 
-Star can directly count the reads per gene using by default only uniquely mapped genes - I am giving it a try since the results are expected to be the same as the default behavior of htseq. I am also outputting TranscriptomeSAM.
+Star can directly count the reads per gene using by default only uniquely mapped genes - I am giving it a try since the results are expected to be the same as the default behavior of htseq. I am also outputting TranscriptomeSAM (to potentially used with salmon or stringtie). Some files did not have the same naming convention (ex. Run1 - ccdc_12_S3_L001_R1_trim_001.fastq.gz Run2 - ccdc11_S9_L001_R1_trim_001.fastq.gz) so Andrew helped with a python trick (try to split based on `_`, if errors with the expected number of splits, split the first string where the numbers start)
 
 ```
 sbatch ~/project/cauretc/scripts/KO_rnaseq/star_mapping_sub.sh --fastq /home/cauretc/projects/rrg-ben/ben/2021_XL_ko_tad_RNAseq/raw_data_3rd_run/scanw/*trim*.fastq.gz --genomeSTARDir /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/genomeDir --output_directory /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/star_mapping --prefix_out
@@ -177,3 +177,8 @@ install.packages("BiocManager")
 BiocManager::install("edgeR")
 ```
 `export R_LIBS_USER=/home/cauretc/project/cauretc/R_libs` did not work to set the libs path but got installed in the good directory still (where I was)
+
+## Analysis
+
+Important: dmw was split over 2 runs, which needs to be accounted for. ccdc was also split over 2 runs but only males were in the 2nd runs. The most important here is to compare wt females versus KO females.
+`edger_DE_KO.R` - need to be updated for it (March 25)

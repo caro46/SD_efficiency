@@ -44,11 +44,13 @@ def main():
 	#outfile.write("\n")
 	for gene in gene_set:
 		#print(gene, end='\t')
-		outfile.write(gene + "\t")
+		#outfile.write(gene + "\t")
+		outfile.write(gene)
 		for file in file_names:
 			if gene in dictionary_filenames[file]:
 				#print(dictionary_filenames[file][gene], end='\t')
-				outfile.write(dictionary_filenames[file][gene] + "\t")
+				#outfile.write(dictionary_filenames[file][gene] + "\t")
+				outfile.write("\t" + dictionary_filenames[file][gene])
 			else:
 				#print("NA", end='\t')
 				outfile.write("NA" + "\t")
