@@ -168,6 +168,13 @@ Can be run like this:
 
 Online [manual](http://ccb.jhu.edu/software/stringtie/index.shtml?t=manual#deseq). "Our focus in developing StringTie was on building a system that can assemble and quantitate transcripts regardless of whether gene annotation is available." (FAQ)
 
+Stringtie requires a `XS` tag, need to specify for `star` `--outSAMstrandField intronMotif` (specified in the manual for compatibility with `Cufflinks/Cuffdiff`) or maybe simply `--outSAMattributes NH HI NM MD AS nM jM jI XS` (default: `NH HI AS nM`). Probably better to also do a `--twopassMode Basic`.
+
+For each individual we will run `stringtie` with `-G <ref_ann.gff> -o [<path/>]<out.gtf> <read_alignments.bam>`, then use `stringtie --merge -G <ref_ann.gff> list_ind_file.txt -o output_merged.gtf`, follow by `stringtie -e -G output_merged.gtf -o [<path/>]<out_exp_est.gtf> <read_alignments.bam>` for each individual. Then, `prepDE.py -i sample_lst.txt`. Format of `sample_lst.txt`:
+```
+sample1 <PATH_TO_sample1.gtf>
+sample2 <PATH_TO_sample2.gtf>
+```
 
 # Analysis of counts - EdgeR
 ## Installation
