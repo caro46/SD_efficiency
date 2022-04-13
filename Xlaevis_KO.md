@@ -188,4 +188,7 @@ BiocManager::install("edgeR")
 ## Analysis
 
 Important: dmw was split over 2 runs, which needs to be accounted for. ccdc was also split over 2 runs but only males were in the 2nd runs. The most important here is to compare wt females versus KO females.
-`edger_DE_KO.R` - need to be updated for it (March 25)
+`edger_DE_KO.R` - need to be updated for it (March 25). Updated April 13, 2022
+
+### Using count from STAR
+Nothing differentially expressed between wild type and KO females for dmw (required at least 5 reads for a gene to be considered). For scanw and ccdc69w, none of the identified DE genes are common and none of them are in Piprek et al. 2018.
