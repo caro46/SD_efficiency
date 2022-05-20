@@ -175,6 +175,7 @@ For each individual we will run `stringtie` with `-G <ref_ann.gff> -o [<path/>]<
 sample1 <PATH_TO_sample1.gtf>
 sample2 <PATH_TO_sample2.gtf>
 ```
+On graham: v. 2.1.5.
 
 # Analysis of counts - EdgeR
 ## Installation
