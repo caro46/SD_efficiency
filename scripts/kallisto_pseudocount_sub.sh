@@ -5,15 +5,15 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --time=1:00:00
 #SBATCH --mem=1G
-#SBATCH --output=star_mapping.%J.out
-#SBATCH --error=star_mapping.%J.err
+#SBATCH --output=kallisto.%J.out
+#SBATCH --error=kallisto.%J.err
 #SBATCH --account=def-ben
 #SBATCH --mail-user=cauretc@oregonstate.edu
 #SBATCH --mail-type=BEGIN
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
 
-module load star/2.7.9a
+module load kallisto/0.46.1
 
 #for indexing
 python3 ~/project/cauretc/scripts/KO_rnaseq/kallisto_pseudocount.py $@ --threads 1
