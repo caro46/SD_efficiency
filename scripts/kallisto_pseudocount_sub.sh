@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=star_mapping
+#SBATCH --job-name=kallisto
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --time=1:00:00
