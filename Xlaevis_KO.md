@@ -96,6 +96,20 @@ I realized run1 had samples split on 2 lanes. On March 16, used `concat_PE_per_i
 ```
 python3 ~/project/cauretc/scripts/KO_rnaseq/concat_PE_per_ind.py --files /home/cauretc/projects/rrg-ben/ben/2021_XL_ko_tad_RNAseq/raw_data/dmw/*trim*.fastq.gz --output_directory /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/merged_fastq_files
 ```
+```
+sbatch ~/project/cauretc/scripts/KO_rnaseq/star_mapping_sub.sh --fastq /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/merged_fastq_files_Run1/ccdc*trim*.fastq.gz --genomeSTARDir /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/genomeDir --output_directory /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/star_mapping --prefix_out Run1_
+```
+(June 8th, 2022):
+
+Deleting all the `star_mapping/*Aligned.toTranscriptome.out.bam` produced by `TranscriptomeSAM` since we are not going to use them. 
+Sometime ago I added an option `count` in the `star_mapping.py`: for ex. `--count stringtie` will run with the needed option to obtain files compatible with stringtie (also do a twopass mode). `--count star` will do the commands from March 19.
+```
+#submitted for 10h - done in 08:37:12 
+sbatch ~/project/cauretc/scripts/KO_rnaseq/star_mapping_sub.sh --fastq /home/cauretc/projects/rrg-ben/ben/2021_XL_ko_tad_RNAseq/raw_data_3rd_run/scanw/*trim*.fastq.gz --genomeSTARDir /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/genomeDir --output_directory /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/star_mapping_for_stringtie --prefix_out --count stringtie
+
+#submitted for 15h - done in
+sbatch ~/project/cauretc/scripts/KO_rnaseq/star_mapping_sub.sh --fastq /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/merged_fastq_files_Run1/ccdc*trim*.fastq.gz --genomeSTARDir /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/genomeDir --output_directory /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/star_mapping_for_stringtie --prefix_out Run1_ --count stringtie
+```
 
 ### Checking for reads on the W specific genes:
 
@@ -176,6 +190,19 @@ sample1 <PATH_TO_sample1.gtf>
 sample2 <PATH_TO_sample2.gtf>
 ```
 On graham: v. 2.1.5.
+
+# Pseudo-alignment - kallisto
+
+[Kallisto page](https://pachterlab.github.io/kallisto/starting). Command ex.:
+```
+kallisto index -i transcripts.idx transcripts.fasta.gz
+kallisto quant -b 100 -i index -o output read1.fastq.gz read2.fastq.gz
+```
+```
+sbatch ~/project/cauretc/scripts/KO_rnaseq/kallisto_pseudocount_sub.sh --ref_transcriptome /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.1_GCF.transcripts.fa.gz --step index
+sbatch ~/project/cauretc/scripts/KO_rnaseq/kallisto_pseudocount_sub.sh --ref_transcriptome /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.1_GCF.transcripts.fa.gz --step quant --fastq /home/cauretc/projects/rrg-ben/ben/2021_XL_ko_tad_RNAseq/raw_data_3rd_run/scanw/*trim*.fastq.gz --output_directory /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/kallisto_dir --prefix_out
+```
+`kallisto_pseudocount_sub.sh` needs to be updated for the resources needed depending on the step run.
 
 # Analysis of counts - EdgeR
 ## Installation
