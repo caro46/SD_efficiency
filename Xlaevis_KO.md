@@ -198,11 +198,15 @@ On graham: v. 2.1.5.
 kallisto index -i transcripts.idx transcripts.fasta.gz
 kallisto quant -b 100 -i index -o output read1.fastq.gz read2.fastq.gz
 ```
+(June 10th, 22)
+
 ```
 sbatch ~/project/cauretc/scripts/KO_rnaseq/kallisto_pseudocount_sub.sh --ref_transcriptome /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.1_GCF.transcripts.fa.gz --step index
 sbatch ~/project/cauretc/scripts/KO_rnaseq/kallisto_pseudocount_sub.sh --ref_transcriptome /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.1_GCF.transcripts.fa.gz --step quant --fastq /home/cauretc/projects/rrg-ben/ben/2021_XL_ko_tad_RNAseq/raw_data_3rd_run/scanw/*trim*.fastq.gz --output_directory /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/kallisto_dir --prefix_out
 ```
 `kallisto_pseudocount_sub.sh` needs to be updated for the resources needed depending on the step run.
+
+For the indexing, I initially requested 1G of RAM, too low, 10G worked. It took 5min36, 1 thread. For quantification, BJE previously used 32G for his analysis, doing the same, except requesting 6 tasks.
 
 # Analysis of counts - EdgeR
 ## Installation
