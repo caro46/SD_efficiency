@@ -206,7 +206,17 @@ sbatch ~/project/cauretc/scripts/KO_rnaseq/kallisto_pseudocount_sub.sh --ref_tra
 ```
 `kallisto_pseudocount_sub.sh` needs to be updated for the resources needed depending on the step run.
 
-For the indexing, I initially requested 1G of RAM, too low, 10G worked. It took 5min36, 1 thread. For quantification, BJE previously used 32G for his analysis, doing the same, except requesting 6 tasks.
+For the indexing, I initially requested 1G of RAM, too low, 10G worked. It took 5min36, 1 thread. For quantification, BJE previously used 32G for his analysis, doing the same, except requesting 6 tasks (done in 01:28:12 for scanw).
+
+The `kallisto quant` produces a `.h5`, `.tsv` and `.json` files within each of the directory specify with the `-o`. For each samples they are name the same within each directory. BJE previously used a trinity utility script to merge all the individuals and obtain a better format.
+```
+#get the location of trinity on graham
+module show trinity/2.14.0
+#path to the needed script
+#/cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/trinity/2.14.0/trinityrnaseq-v2.14.0/util/abundance_estimates_to_matrix.pl
+#get a file with the absolute path for each of the abundance file for scanw (within 'kallisto_dir')
+ls -d $PWD/SCANW*/*.tsv >scanw_abundance_listing_target_files.txt
+```
 
 # Analysis of counts - EdgeR
 ## Installation
