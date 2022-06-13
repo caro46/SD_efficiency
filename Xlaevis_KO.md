@@ -110,6 +110,20 @@ sbatch ~/project/cauretc/scripts/KO_rnaseq/star_mapping_sub.sh --fastq /home/cau
 #submitted for 15h - done in
 sbatch ~/project/cauretc/scripts/KO_rnaseq/star_mapping_sub.sh --fastq /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/merged_fastq_files_Run1/ccdc*trim*.fastq.gz --genomeSTARDir /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/genomeDir --output_directory /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/star_mapping_for_stringtie --prefix_out Run1_ --count stringtie
 ```
+### Paths of the data
+Since I had to merge only 1 Run, the files are in separate directories. To make it easier/quicker, below are the path of the reads data (trimmed only or trimmed and merged when needed), along with some information (number ind/sex - ! females refer to genotypic fem = ZW but not phenotypic !) 
+```
+#Run 1, ccdc69w, 11 ind. (3 wt males, 2 wt females, 6 KO females)
+/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/merged_fastq_files_Run1/ccdc*trim*.fastq.gz
+#Run 1, dmw, 8 ind. (2 wt females, 6 KO females)
+/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/merged_fastq_files_Run1/dmw*trim*.fastq.gz
+#Run 2, ccdc69w, 3 ind. (3 wt males)
+/home/cauretc/projects/rrg-ben/ben/2021_XL_ko_tad_RNAseq/raw_data_2nd_run/ccdc/*trim*.fastq.gz
+#Run 2, dmw, 4 ind. (4 wt females)
+/home/cauretc/projects/rrg-ben/ben/2021_XL_ko_tad_RNAseq/raw_data_2nd_run/dmw/*trim*.fastq.gz
+#Run 3, scanw, 9 ind. (4 wt females, 5 KO females)
+/home/cauretc/projects/rrg-ben/ben/2021_XL_ko_tad_RNAseq/raw_data_3rd_run/scanw/*trim*.fastq.gz
+```
 
 ### Checking for reads on the W specific genes:
 
@@ -206,7 +220,7 @@ sbatch ~/project/cauretc/scripts/KO_rnaseq/kallisto_pseudocount_sub.sh --ref_tra
 ```
 `kallisto_pseudocount_sub.sh` needs to be updated for the resources needed depending on the step run.
 
-For the indexing, I initially requested 1G of RAM, too low, 10G worked. It took 5min36, 1 thread. For quantification, BJE previously used 32G for his analysis, doing the same, except requesting 6 tasks (done in 01:28:12 for scanw).
+For the indexing, I initially requested 1G of RAM, too low, 10G worked. It took 5min36, 1 thread. For quantification, BJE previously used 32G for his analysis, doing the same, except requesting 6 tasks (done in 01:28:12 for scanw, June 13th: dmw run1:, run2:, ccdc: run1:, run2:).
 
 The `kallisto quant` produces a `.h5`, `.tsv` and `.json` files within each of the directory specify with the `-o`. For each samples they are name the same within each directory. BJE previously used a trinity utility script to merge all the individuals and obtain a better format.
 ```
