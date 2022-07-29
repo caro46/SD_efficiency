@@ -301,4 +301,16 @@ Important: dmw was split over 2 runs, which needs to be accounted for. ccdc was 
 `edger_DE_KO.R` - need to be updated for it (March 25). Updated April 13, 2022
 
 ### Using count from STAR
-Nothing differentially expressed between wild type and KO females for dmw (required at least 5 reads for a gene to be considered). For scanw and ccdc69w, none of the identified DE genes are common and none of them are in Piprek et al. 2018.
+Nothing differentially expressed between wild type and KO females for dmw (required at least 5 reads for a gene to be considered). For scanw and ccdc69w, none of the identified DE genes are common and none of them are in Piprek et al. 2018. 
+
+Updates July 29th: requiring on average 1 read/ind: nothing sig for dmw. 19/5 down/up for scanw, 3/7 for ccdc69w. Nothing common with Piprek.
+
+### kallisto
+
+During the analysis only the first part of the header was kept. I cannot directly used the annotation gff file as previously but all the information needed for annotation is contain in the header of the transcripts file. I put the info from header in a file as follow:
+```
+zgrep ">" /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.1_GCF.transcripts.fa.gz | sed -e 's/>//' > /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.1_GCF.transcripts_headers_only.txt
+sed 's/[ ]\[/;/g ; s/\]//g' /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.1_GCF.transcripts_headers_only.txt >/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.1_GCF.transcripts_headers_only1.txt
+mv /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.1_GCF.transcripts_headers_only1.txt /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.1_GCF.transcripts_headers_only.txt
+```
+The `edger` analysis for kallisto output is within the `edger_DE_KO.R` after the `STAR` analysis.

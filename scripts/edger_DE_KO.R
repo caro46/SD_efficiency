@@ -61,9 +61,9 @@ heatmap(cor(counts_scanw))
 dev.off()
 
 #Based on https://research.stowers.org/cws/CompGenomics/Projects/edgeR.html - good to filter very low read counts
-counts_scanw <- counts_scanw %>% filter(rowSums(.) > 5)
-counts_dmw <- counts_dmw %>% filter(rowSums(.) > 5)
-counts_ccdc_female_KO_wt <- counts_ccdc_female_KO_wt %>% filter(rowSums(.) > 5)
+#counts_scanw <- counts_scanw %>% filter(rowSums(.) > 5)
+#counts_dmw <- counts_dmw %>% filter(rowSums(.) > 5)
+#counts_ccdc_female_KO_wt <- counts_ccdc_female_KO_wt %>% filter(rowSums(.) > 5)
 
 #from 
 #dim(counts_scanw) #same number of genes for each set (scanw, ccdc and dmw)
@@ -75,6 +75,11 @@ counts_ccdc_female_KO_wt <- counts_ccdc_female_KO_wt %>% filter(rowSums(.) > 5)
 #[1] 31475     8
 #dim(counts_dmw)
 #[1] 32528    12
+
+#After talking to BJE: min = 1 read / ind
+counts_scanw <- counts_scanw %>% filter(rowSums(.) > ncol(.))
+counts_dmw <- counts_dmw %>% filter(rowSums(.) > ncol(.))
+counts_ccdc_female_KO_wt <- counts_ccdc_female_KO_wt %>% filter(rowSums(.) > ncol(.))
 
 #Making sure the wt_f is the ref
 group_scanw = factor(c("wt_f","wt_f","scanwKO","scanwKO","scanwKO","scanwKO","scanwKO","wt_f","wt_f")) %>%
@@ -131,30 +136,51 @@ qlf_dmw <- glmQLFTest(fit_dmw) #by default the test is for the last coefficient 
 topTags(et_scanw)
 topTags(et_ccdc)
 topTags(qlf_dmw)
+
+#res for at least 1 read / ind on average
 summary(decideTests(qlf_dmw))
-#group_dmwdmwKO
+#       group_dmwdmwKO
 #Down                0
-#NotSig          32528
+#NotSig          30702
 #Up                  0
 summary(decideTests(et_scanw))
-#scanwKO-wt_f
-#Down             23
-#NotSig        32254
-#Up                6
+#       scanwKO-wt_f
+#Down             19
+#NotSig        31041
+#Up                5
 summary(decideTests(et_ccdc))
-#ccdc_KO-wt_f
+#       ccdc_KO-wt_f
 #Down              3
-#NotSig        31466
-#Up                6
+#NotSig        30671
+#Up                7
+
+#res for at least 5 reads / gene
+# summary(decideTests(qlf_dmw))
+# #group_dmwdmwKO
+# #Down                0
+# #NotSig          32528
+# #Up                  0
+# summary(decideTests(et_scanw))
+# #scanwKO-wt_f
+# #Down             23
+# #NotSig        32254
+# #Up                6
+# summary(decideTests(et_ccdc))
+# #ccdc_KO-wt_f
+# #Down              3
+# #NotSig        31466
+# #Up                6
 
 ### How many genes look significant?
-sum(et_scanw$table$PValue < 0.05)
-#[1] 1280
-### How many genes show 2-fold enrichment?
-sum(et_scanw$table$PValue < 0.05 & et_scanw$table$logFC > 1)
-#[1] 413
-sum(et_scanw$table$PValue < 0.05 & et_scanw$table$logFC < -1)
-#[1] 527
+
+#at least 5 reads / gene
+# sum(et_scanw$table$PValue < 0.05)
+# #[1] 1280
+# ### How many genes show 2-fold enrichment?
+# sum(et_scanw$table$PValue < 0.05 & et_scanw$table$logFC > 1)
+# #[1] 413
+# sum(et_scanw$table$PValue < 0.05 & et_scanw$table$logFC < -1)
+# #[1] 527
 
 #Check on dmrt1
 #dmrt1.L XBXL10_1g2070 
@@ -164,6 +190,7 @@ goi <- c(dmrt1.L="XBXL10_1g2070",dmrt1.S="XBXL10_1g4848",foxl2.L="XBXL10_1g24241
 #goi <- c(dmrt1.L="XBXL10_1g2070",dmrt1.S="XBXL10_1g4848")
 iv_scanw <- match(goi, rownames(et_scanw$table))
 et_scanw$table[iv_scanw,]
+#at least 5 reads / gene
 #logFC    logCPM     PValue
 #XBXL10_1g2070   1.0078066 -0.2314961 0.2431423
 #NA                     NA         NA        NA
@@ -174,6 +201,7 @@ et_scanw$table[iv_scanw,]
 et_scanw$table$padj <- p.adjust(et_scanw$table$PValue, method="BH")
 #et_dmw$table$padj <- p.adjust(et_dmw$table$PValue, method="BH")
 et_ccdc$table$padj <- p.adjust(et_ccdc$table$PValue, method="BH")
+#at least 5 reads / gene
 sum(et_scanw$table$padj < 0.05 & et_scanw$table$logFC > 1)
 #[1] 6
 sum(et_scanw$table$padj < 0.05 & et_scanw$table$logFC < -1)
@@ -220,13 +248,20 @@ head(scanw_DE_genes_sig)
 #head(dmw_DE_genes_sig)
 head(ccdc_DE_genes_sig)
 dim(scanw_DE_genes_sig)
+#5 reads / gene
 #[1] 29  6
 dim(ccdc_DE_genes_sig)
+#5 reads / gene
 #[1] 9 6
 #Saving 
-write.csv(ccdc_DE_genes_sig,"/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/EdgeR_analysis/DE_genes_ccdc_KO.csv", 
+#5 reads / gene
+#write.csv(ccdc_DE_genes_sig,"/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/EdgeR_analysis/DE_genes_ccdc_KO.csv", 
+#          row.names = FALSE, quote=FALSE)
+#write.csv(scanw_DE_genes_sig,"/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/EdgeR_analysis/DE_genes_scanw_KO.csv", 
+#          row.names = FALSE, quote=FALSE)
+write.csv(ccdc_DE_genes_sig,"/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/EdgeR_analysis/DE_genes_ccdc_KO_1read_ind_av.csv", 
           row.names = FALSE, quote=FALSE)
-write.csv(scanw_DE_genes_sig,"/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/EdgeR_analysis/DE_genes_scanw_KO.csv", 
+write.csv(scanw_DE_genes_sig,"/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/STAR_dir/EdgeR_analysis/DE_genes_scanw_KO_1read_ind_av.csv", 
           row.names = FALSE, quote=FALSE)
 
 #checking if any gene from Piprek et al. 2018
@@ -296,3 +331,94 @@ scanw_ccdc_shared <- inner_join(scanw_DE_genes_sig, ccdc_DE_genes_sig, by = "gen
 
 #scanw_DE_genes_sig %>% filter(geneName %in% genes_interest)
 #1 -2.263684 2.733762 6.306143e-05 0.01908059 XBXL10_1g37486  ptgds.S #not after filtering based on 5 reads for each gene
+
+#############################################
+# kallisto
+#############################################
+setwd("/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/kallisto_dir/trinity_matrix_format/")
+counts_scanw <- read.table("scanw.isoform.counts.matrix", sep="\t", h = TRUE, row.names = 1)
+colnames(counts_scanw)<-gsub("_kallisto_bout_out","",colnames(counts_scanw))
+counts_dmw <- read.table("dmw.isoform.counts.matrix", sep="\t", h = TRUE, row.names = 1)
+colnames(counts_dmw)<-gsub("_kallisto_bout_out","",colnames(counts_dmw))
+
+#for ccdc we also have wt males, for now, exluce them
+ccdc_female_KO_wt <- c("ccdc_14_Run1_L001L002", "ccdc_30_Run1_L001L002", "ccdc_32_Run1_L001L002", "ccdc_35_Run1_L001L002", 
+                       "ccdc_36_Run1_L001L002", "ccdc_42_Run1_L001L002",
+                       "ccdc_34_Run1_L001L002", "ccdc_3_Run1_L001L002") #only 2 wt_f
+counts_ccdc_female_KO_wt <- read.table("ccdc69w.isoform.counts.matrix", sep="\t", h = TRUE, row.names = 1) 
+colnames(counts_ccdc_female_KO_wt)<-gsub("_kallisto_bout_out","",colnames(counts_ccdc_female_KO_wt))
+
+counts_ccdc_female_KO_wt <- counts_ccdc_female_KO_wt %>%
+  select(all_of(ccdc_female_KO_wt))
+
+#exact same commands as previously (on av. 1 read/ind)
+summary(decideTests(qlf_dmw))
+#       group_dmwdmwKO
+#Down                2
+#NotSig          61210
+#Up                  5
+summary(decideTests(et_scanw))
+#       scanwKO-wt_f
+#Down             23
+#NotSig        61727
+#Up               14
+summary(decideTests(et_ccdc))
+#       ccdc_KO-wt_f
+#Down             55
+#NotSig        60364
+#Up               94
+
+et_scanw$table$padj <- p.adjust(et_scanw$table$PValue, method="BH")
+et_ccdc$table$padj <- p.adjust(et_ccdc$table$PValue, method="BH")
+qlf_dmw$table$padj <- p.adjust(qlf_dmw$table$PValue, method="BH")
+
+#enriched mutants
+scanw_DE_genes_sig_enriched <- et_scanw$table[et_scanw$table$padj < 0.05 & et_scanw$table$logFC > 0,]
+ccdc_DE_genes_sig_enriched <- et_ccdc$table[et_ccdc$table$padj < 0.05 & et_ccdc$table$logFC > 0,]
+dmw_DE_genes_sig_enriched <- qlf_dmw$table[qlf_dmw$table$padj < 0.05 & qlf_dmw$table$logFC > 0,]
+
+#depleted mutants
+scanw_DE_genes_sig_depleted <- et_scanw$table[et_scanw$table$padj < 0.05 & et_scanw$table$logFC < 0,]
+ccdc_DE_genes_sig_depleted <- et_ccdc$table[et_ccdc$table$padj < 0.05 & et_ccdc$table$logFC < 0,]
+dmw_DE_genes_sig_depleted <- qlf_dmw$table[qlf_dmw$table$padj < 0.05 & qlf_dmw$table$logFC < 0,]
+
+#cn't use the gtf file for annotation somehow...
+scanw_DE_genes_sig <- rbind(scanw_DE_genes_sig_enriched, scanw_DE_genes_sig_depleted) 
+scanw_DE_genes_sig <- scanw_DE_genes_sig %>%
+  mutate(geneID = rownames(scanw_DE_genes_sig))
+#scanw_DE_genes_sig <- left_join(scanw_DE_genes_sig, laevis10gtf_min_info, by = "geneID") 
+
+dmw_DE_genes_sig <- rbind(dmw_DE_genes_sig_enriched, dmw_DE_genes_sig_depleted) 
+dmw_DE_genes_sig <- dmw_DE_genes_sig %>%
+  mutate(geneID = rownames(dmw_DE_genes_sig))
+#dmw_DE_genes_sig <- left_join(dmw_DE_genes_sig, laevis10gtf_min_info, by = "geneID") 
+
+ccdc_DE_genes_sig <- rbind(ccdc_DE_genes_sig_enriched, ccdc_DE_genes_sig_depleted) 
+ccdc_DE_genes_sig <- ccdc_DE_genes_sig %>%
+  mutate(geneID = rownames(ccdc_DE_genes_sig))
+#ccdc_DE_genes_sig <- left_join(ccdc_DE_genes_sig, laevis10gtf_min_info, by = "geneID") 
+
+#get the gene ID and product from fasta file 
+head(scanw_DE_genes_sig)
+head(dmw_DE_genes_sig)
+head(ccdc_DE_genes_sig)
+dim(scanw_DE_genes_sig)
+#[1] 37  5
+dim(ccdc_DE_genes_sig)
+#[1] 149   5
+dim(dmw_DE_genes_sig)
+#[1] 7 6
+
+laevis10transcript_info <- read.table("/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.1_GCF.transcripts_headers_only.txt",
+  sep = ";", h = F, fill = T ) %>% select(V1:V4) %>% rename(geneID = V1, gene = V2, ref = V3, product= V4)  
+
+ccdc_DE_genes_sig <- left_join(ccdc_DE_genes_sig, laevis10transcript_info, by = "geneID") 
+dmw_DE_genes_sig <- left_join(dmw_DE_genes_sig, laevis10transcript_info, by = "geneID") 
+scanw_DE_genes_sig <- left_join(scanw_DE_genes_sig, laevis10transcript_info, by = "geneID") 
+
+write.csv(ccdc_DE_genes_sig,"/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/kallisto_dir/EdgeR_analysis/DE_genes_ccdc_KO_1read_ind_av.csv", 
+          row.names = FALSE, quote=FALSE)
+write.csv(scanw_DE_genes_sig,"/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/kallisto_dir/EdgeR_analysis/DE_genes_scanw_KO_1read_ind_av.csv", 
+          row.names = FALSE, quote=FALSE)
+write.csv(dmw_DE_genes_sig,"/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/kallisto_dir/EdgeR_analysis/DE_genes_dmw_KO_1read_ind_av.csv", 
+          row.names = FALSE, quote=FALSE)
