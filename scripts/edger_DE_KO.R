@@ -416,9 +416,45 @@ ccdc_DE_genes_sig <- left_join(ccdc_DE_genes_sig, laevis10transcript_info, by = 
 dmw_DE_genes_sig <- left_join(dmw_DE_genes_sig, laevis10transcript_info, by = "geneID") 
 scanw_DE_genes_sig <- left_join(scanw_DE_genes_sig, laevis10transcript_info, by = "geneID") 
 
+
 write.csv(ccdc_DE_genes_sig,"/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/kallisto_dir/EdgeR_analysis/DE_genes_ccdc_KO_1read_ind_av.csv", 
           row.names = FALSE, quote=FALSE)
 write.csv(scanw_DE_genes_sig,"/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/kallisto_dir/EdgeR_analysis/DE_genes_scanw_KO_1read_ind_av.csv", 
           row.names = FALSE, quote=FALSE)
 write.csv(dmw_DE_genes_sig,"/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/kallisto_dir/EdgeR_analysis/DE_genes_dmw_KO_1read_ind_av.csv", 
           row.names = FALSE, quote=FALSE)
+
+#checking if anything shared
+## transcript level
+scanw_ccdcw_shared = inner_join(ccdc_DE_genes_sig, scanw_DE_genes_sig, by ="geneID") 
+names(scanw_ccdcw_shared) <- gsub(".x", "_ccdc", names(scanw_ccdcw_shared))
+names(scanw_ccdcw_shared) <- gsub(".y", "_scanw", names(scanw_ccdcw_shared))
+scanw_ccdcw_shared
+#gene=mrtfa.S myocardin related transcription factor A S homeolog, transcript variant X5
+dmw_ccdcw_shared = inner_join(ccdc_DE_genes_sig, dmw_DE_genes_sig, by ="geneID") 
+names(dmw_ccdcw_shared) <- gsub(".x", "_ccdc", names(dmw_ccdcw_shared))
+names(dmw_ccdcw_shared) <- gsub(".y", "_dmw", names(dmw_ccdcw_shared))
+dmw_ccdcw_shared
+#nothing
+scanw_dmw_shared = inner_join(dmw_DE_genes_sig, scanw_DE_genes_sig, by ="geneID") 
+names(scanw_ccdcw_shared) <- gsub(".x", "_dmw", names(scanw_ccdcw_shared))
+names(scanw_ccdcw_shared) <- gsub(".y", "_scanw", names(scanw_ccdcw_shared))
+scanw_dmw_shared
+#nothing
+
+## gene level
+scanw_ccdcw_shared_gene = inner_join(ccdc_DE_genes_sig %>% filter(!is.na(gene)), scanw_DE_genes_sig %>% filter(!is.na(gene)), by ="gene") 
+names(scanw_ccdcw_shared_gene) <- gsub(".x", "_ccdc", names(scanw_ccdcw_shared_gene))
+names(scanw_ccdcw_shared_gene) <- gsub(".y", "_scanw", names(scanw_ccdcw_shared_gene))
+#gene=mrtfa.S
+#gene=paics.2.L (diff variant for the KO: X3 for scanw, X2 for ccdc)
+dmw_ccdcw_shared_gene = inner_join(ccdc_DE_genes_sig %>% filter(!is.na(gene)), dmw_DE_genes_sig %>% filter(!is.na(gene)), by ="gene") 
+names(dmw_ccdcw_shared_gene) <- gsub(".x", "_ccdc", names(dmw_ccdcw_shared_gene))
+names(dmw_ccdcw_shared_gene) <- gsub(".y", "_dmw", names(dmw_ccdcw_shared_gene))
+dmw_ccdcw_shared_gene
+#nothing
+scanw_dmw_shared_gene = inner_join(dmw_DE_genes_sig %>% filter(!is.na(gene)), scanw_DE_genes_sig %>% filter(!is.na(gene)), by ="gene") 
+names(scanw_dmw_shared_gene) <- gsub(".x", "_ccdc", names(scanw_dmw_shared_gene))
+names(scanw_dmw_shared_gene) <- gsub(".y", "_scanw", names(scanw_dmw_shared_gene))
+scanw_dmw_shared_gene
+#nothing

@@ -314,3 +314,4 @@ sed 's/[ ]\[/;/g ; s/\]//g' /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnase
 mv /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.1_GCF.transcripts_headers_only1.txt /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.1_GCF.transcripts_headers_only.txt
 ```
 The `edger` analysis for kallisto output is within the `edger_DE_KO.R` after the `STAR` analysis.
+Some overlap found for ccdc and scanw (mrtfa.S and paics.2.L) but not for dmw.
