@@ -2,6 +2,45 @@
 With BJE we are going to analyze the RNAseq data obtained from KO individuals of the genes on W of *X. laevis*.
 Custom scripts to process and analyze data are in the `scripts` subfolder.
 
+## Individuals info
+```
+SCANW_T14_L002  wt_f
+SCANW_T15_L002  wt_f
+SCANW_T19_L002  scanwKO
+SCANW_T27_L002  scanwKO
+SCANW_T28_L002  scanwKO
+SCANW_T30_L002  scanwKO
+SCANW_T31_L002  scanwKO
+SCANW_T6_L002   wt_f
+SCANW_T9_L002   wt_f
+dmw_12_Run2_L001    wt_f
+dmw_14_Run1_L001L002    dmwKO
+dmw_15_Run2_L001    wt_f
+dmw_16_Run1_L001L002    dmwKO
+dmw_17_Run1_L001L002    wt_f
+dmw_20_Run1_L001L002    wt_f
+dmw_22_Run2_L001    wt_f
+dmw_26_Run1_L001L002    dmwKO
+dmw_28_Run1_L001L002    dmwKO
+dmw_29_Run1_L001L002    dmwKO
+dmw_35_Run1_L001L002    dmwKO
+dmw_9_Run2_L001 wt_f
+ccdc_11_Run2_L001   wt_m
+ccdc_12_Run1_L001L002   wt_m
+ccdc_13_Run2_L001   wt_m
+ccdc_14_Run1_L001L002 ccdc_KO
+ccdc_25_Run1_L001L002   wt_m
+ccdc_2_Run2_L001    wt_m
+ccdc_30_Run1_L001L002   ccdc_KO
+ccdc_32_Run1_L001L002   ccdc_KO
+ccdc_34_Run1_L001L002   wt_f
+ccdc_35_Run1_L001L002   ccdc_KO
+ccdc_36_Run1_L001L002   ccdc_KO
+ccdc_3_Run1_L001L002    wt_f
+ccdc_42_Run1_L001L002   ccdc_KO
+ccdc_9_Run1_L001L002    wt_m
+```
+
 # Preliminary
 
 ## Xenbase data
@@ -230,6 +269,21 @@ module show trinity/2.14.0
 #/cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/trinity/2.14.0/trinityrnaseq-v2.14.0/util/abundance_estimates_to_matrix.pl
 #get a file with the absolute path for each of the abundance file for scanw (within 'kallisto_dir')
 ls -d $PWD/SCANW*/*.tsv >scanw_abundance_listing_target_files.txt
+```
+(July 19th, 2022)
+
+Obtained all the `[...]_listing_target_files.txt` using the ex. command above.
+To obtain the matrices, did not use sbatch since <2min of run. Requires to load EdgeR.
+```
+module load trinity/2.14.0
+module load r/4.1.2
+export R_LIBS_USER=/home/cauretc/project/cauretc/R_libs
+/cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/trinity/2.14.0/trinityrnaseq-v2.14.0/util/abundance_estimates_to_matrix.pl --est_method kallisto --out_prefix dmw  --gene_trans_map none --name_sample_by_basedir --quant_files dmw_abundance_listing_target_files.txt
+```
+Ex. of out - ccdc69w.isoform.counts.matrix
+```
+ccdc_11_Run2_L001_kallisto_bout_out     ccdc_12_Run1_L001L002_kallisto_bout_out ccdc_13_Run2_L001_kallisto_bout_out     ccdc_14_Run1_L001L002_kallisto_bout_out ccdc_25_Run1_L001L002_kallisto_bout_out ccdc_2_Run2_L001_kallisto_bout_out      ccdc_30_Run1_L001L002_kallisto_bout_out ccdc_32_Run1_L001L002_kallisto_bout_out ccdc_34_Run1_L001L002_kallisto_bout_out ccdc_35_Run1_L001L002_kallisto_bout_out ccdc_36_Run1_L001L002_kallisto_bout_out ccdc_3_Run1_L001L002_kallisto_bout_out  ccdc_42_Run1_L001L002_kallisto_bout_out ccdc_9_Run1_L001L002_kallisto_bout_out
+lcl|NC_054387.1_mrna_XM_018235619.2_76046       5.02266e-07     109     3.15872e-07     62      1.75048e-06     1.74321e-06     64.4464 127.407 125     0.0495367       126     7.51099e-08     3.07987e-07     0
 ```
 
 # Analysis of counts - EdgeR
