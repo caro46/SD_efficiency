@@ -315,3 +315,7 @@ mv /home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/Xenla10_1_seq/XENLA_10.
 ```
 The `edger` analysis for kallisto output is within the `edger_DE_KO.R` after the `STAR` analysis.
 Some overlap found for ccdc and scanw (mrtfa.S and paics.2.L) but not for dmw. paics is especially interesting ([Curzon et al. 2021](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8268354/)).
+
+Some other especially interesting genes:
+
+- ccdc: LOC108704262 (product=oocyte zinc finger protein XlCOF29-like), tex261.L (testis expressed 261 L homeolog), zeb2.L (product=zinc finger E-box binding homeobox 2 L homeolog), paqr3.L (product=progestin and adipoQ receptor family member 3 L homeolog)
