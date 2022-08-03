@@ -40,6 +40,9 @@ ccdc_3_Run1_L001L002    wt_f
 ccdc_42_Run1_L001L002   ccdc_KO
 ccdc_9_Run1_L001L002    wt_m
 ```
+Names of individuals = headers of outputs from `star_count_merged.py`. Also contains lane and run information, important for dmw analysis of females wt vs females KO.
+
+Made a file `/home/cauretc/projects/rrg-ben/cauretc/2021_KO_rnaseq/ind_KO_status.txt` with the same info.
 
 # Preliminary
 
@@ -295,6 +298,11 @@ BiocManager::install("edgeR")
 ```
 `export R_LIBS_USER=/home/cauretc/project/cauretc/R_libs` did not work to set the libs path but got installed in the good directory still (where I was)
 
+Version: 
+```
+[1] edgeR_3.36.0 limma_3.50.3
+```
+
 ## Analysis
 
 Important: dmw was split over 2 runs, which needs to be accounted for. ccdc was also split over 2 runs but only males were in the 2nd runs. The most important here is to compare wt females versus KO females.
@@ -319,3 +327,25 @@ Some overlap found for ccdc and scanw (mrtfa.S and paics.2.L) but not for dmw. p
 Some other especially interesting genes:
 
 - ccdc: LOC108704262 (product=oocyte zinc finger protein XlCOF29-like), tex261.L (testis expressed 261 L homeolog), zeb2.L (product=zinc finger E-box binding homeobox 2 L homeolog), paqr3.L (product=progestin and adipoQ receptor family member 3 L homeolog)
+
+# DESeq2
+
+```
+ module load r/4.1.2 #same as previously for edgeR
+```
+```R
+.libPaths("/home/cauretc/project/cauretc/R_libs")
+BiocManager::install("DESeq2")
+```
+Needed to update some dependencies.
+
+Version:
+
+``` 
+ [1] DESeq2_1.34.0               SummarizedExperiment_1.24.0
+ [3] Biobase_2.54.0              MatrixGenerics_1.6.0       
+ [5] matrixStats_0.62.0          GenomicRanges_1.46.1       
+ [7] GenomeInfoDb_1.30.1         IRanges_2.28.0             
+ [9] S4Vectors_0.32.4            BiocGenerics_0.40.0        
+```
+Run for ouputs from STAR on Aug. 3, 22. For analysis based on kallisto res., better to load data using `tximport`.
