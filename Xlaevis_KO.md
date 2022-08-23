@@ -349,3 +349,5 @@ Version:
  [9] S4Vectors_0.32.4            BiocGenerics_0.40.0        
 ```
 Run for ouputs from STAR on Aug. 3, 22. For analysis based on kallisto res., better to load data using `tximport`.
+
+See `kallisto_DE_analysis.R` for analysis (made / Run Aug. 10) using `tximport` to import at the transcript and gene level count. For ccdc69w: 860/32, scanw: 128/14, dmw: 508/16 DE transcript/gene level with DeSeq2.
