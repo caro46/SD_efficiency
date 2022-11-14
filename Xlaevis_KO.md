@@ -351,3 +351,13 @@ Version:
 Run for ouputs from STAR on Aug. 3, 22. For analysis based on kallisto res., better to load data using `tximport`.
 
 See `kallisto_DE_analysis.R` for analysis (made / Run Aug. 10) using `tximport` to import at the transcript and gene level count. For ccdc69w: 860/32, scanw: 128/14, dmw: 508/16 DE transcript/gene level with DeSeq2.
+
+# Gene ontology
+
+A lot of ways to do it. Some examples:
+
+- overrepresentation of gene ontology categories using WebGestalt (Wang et al. 2013a) in Chandler et al. 2014
+
+- enriched GO terms in ranked gene lists (GOrilla - Eden et al. 2009) in Wright et al. 2017
+
+Xenbase has Data reports which includes "GO terms associated with Xenbase genepages". This contain the gene identifiers and the GO identifiers (ex. GO:0003723) associated with it. To retrieve GO term names associated with each GO IDs, we can use [YeastMine](https://yeastmine.yeastgenome.org/yeastmine/bag.do) as highlighted in the [FAQs of the geneontology webstite](http://geneontology.org/docs/faq/). I gave a try to directly use the go enrichment analysis on the [geneontology website](http://geneontology.org/) with as inputs the list of DE genes for scanw and dmw KO (DESeq2_wtVSKO_all_genes_05sign_gene_level.csv) obtained from kallisto + deseq2 analysis as well as the list I sent to BJE before (DESeq2_wtVSKO_all_genes_05sign_annotation_for_BJE.csv) - only used the genes for scanw - obtained from outputs of star; nothing showed up ("No statistically significant results"). [Young et al. 2010](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-2-r14#MOESM1) has good references (though it probably starts to be a bit old) and explanations in the intro + their application GOseq seems nice.  
